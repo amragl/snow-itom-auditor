@@ -26,6 +26,7 @@ classifiers = [
 dependencies = [
     "fastmcp>=2.0.0",
     "pydantic>=2.0",
+    "pydantic-settings>=2.0",
     "requests>=2.31.0",
     "python-dotenv>=1.0.0",
     "jinja2>=3.1.0",
@@ -65,3 +66,6 @@ warn_unused_configs = true
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-v --tb=short"
+markers = [
+    "integration: marks tests as integration tests requiring a live ServiceNow instance",
+]
