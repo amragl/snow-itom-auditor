@@ -40,3 +40,4 @@ Thumbs.db
 
 # Audit data (local storage)
 .audit-data/
+.snow-audit/

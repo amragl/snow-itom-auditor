@@ -1,0 +1,12 @@
+services:
+  auditor:
+    build: .
+    env_file: .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - audit-data:/app/.snow-audit
+    restart: unless-stopped
+
+volumes:
+  audit-data:
