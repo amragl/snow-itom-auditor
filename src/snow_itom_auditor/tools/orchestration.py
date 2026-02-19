@@ -19,10 +19,10 @@ from snow_itom_auditor.tools.assets import (
     check_unassigned_assets,
 )
 from snow_itom_auditor.tools.cmdb import (
-    check_duplicate_cis,
-    check_missing_ip_address,
-    check_orphan_cis,
-    check_stale_records,
+    check_duplicate_compliance,
+    check_missing_field_compliance,
+    check_orphan_compliance,
+    check_stale_compliance,
 )
 from snow_itom_auditor.tools.discovery import (
     check_ci_reconciliation,
@@ -54,10 +54,10 @@ def run_full_audit(
 
     all_check_fns = [
         # CMDB checks
-        lambda: check_orphan_cis(client),
-        lambda: check_stale_records(client),
-        lambda: check_duplicate_cis(client),
-        lambda: check_missing_ip_address(client),
+        lambda: check_orphan_compliance(client),
+        lambda: check_stale_compliance(client),
+        lambda: check_duplicate_compliance(client),
+        lambda: check_missing_field_compliance(client),
         # Discovery checks
         lambda: check_stale_schedules(client),
         lambda: check_pattern_coverage(client),
