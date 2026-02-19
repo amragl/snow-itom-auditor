@@ -17,10 +17,10 @@ from snow_itom_auditor.tools.assets import (
     check_unassigned_assets,
 )
 from snow_itom_auditor.tools.cmdb import (
-    check_duplicate_cis,
-    check_missing_ip_address,
-    check_orphan_cis,
-    check_stale_records,
+    check_duplicate_compliance,
+    check_missing_field_compliance,
+    check_orphan_compliance,
+    check_stale_compliance,
 )
 from snow_itom_auditor.tools.discovery import (
     check_ci_reconciliation,
@@ -31,19 +31,19 @@ from snow_itom_auditor.tools.discovery import (
 # Map check names to their check functions and recommended remediation actions
 CHECK_REGISTRY: dict[str, dict] = {
     "orphan_cis": {
-        "fn": check_orphan_cis,
+        "fn": check_orphan_compliance,
         "action": "Review orphan CIs and either create relationships or decommission",
     },
     "stale_records": {
-        "fn": check_stale_records,
+        "fn": check_stale_compliance,
         "action": "Update stale CI records or mark as retired if no longer valid",
     },
     "duplicate_cis": {
-        "fn": check_duplicate_cis,
+        "fn": check_duplicate_compliance,
         "action": "Merge or deduplicate CIs with matching name and class",
     },
     "missing_ip_address": {
-        "fn": check_missing_ip_address,
+        "fn": check_missing_field_compliance,
         "action": "Populate IP address field on server CIs or run discovery",
     },
     "stale_discovery_schedules": {
