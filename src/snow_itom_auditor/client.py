@@ -40,9 +40,13 @@ class ServiceNowClient:
         self.max_retries = config.servicenow_max_retries
 
     def _request(self, method: str, url: str, **kwargs: object) -> requests.Response:
-        """Execute an HTTP request with retry logic and error mapping."""
+        """Execute an HTTP request with retry logic and error mapping.
+
+        The initial attempt plus up to ``max_retries`` retries are made,
+        giving a total of ``max_retries + 1`` attempts.
+        """
         last_exception: Exception | None = None
-        for attempt in range(self.max_retries):
+        for attempt in range(1, self.max_retries + 2):
             try:
                 response = self.session.request(
                     method,
@@ -54,21 +58,21 @@ class ServiceNowClient:
                 return response
             except AuditRateLimitError as exc:
                 last_exception = exc
-                wait = exc.retry_after or (2**attempt)
-                logger.warning("Rate limited, retrying in %ds (attempt %d/%d)", wait, attempt + 1, self.max_retries)
+                wait = exc.retry_after or (2 ** (attempt - 1))
+                logger.warning("Rate limited, retrying in %ds (attempt %d/%d)", wait, attempt, self.max_retries + 1)
                 time.sleep(wait)
             except AuditConnectionError as exc:
                 last_exception = exc
-                wait = 2**attempt
-                logger.warning("Connection error, retrying in %ds (attempt %d/%d)", wait, attempt + 1, self.max_retries)
+                wait = 2 ** (attempt - 1)
+                logger.warning("Connection error, retrying in %ds (attempt %d/%d)", wait, attempt, self.max_retries + 1)
                 time.sleep(wait)
             except (requests.ConnectionError, requests.Timeout) as exc:
                 last_exception = AuditConnectionError(
                     f"Connection failed: {exc}",
-                    details={"url": url, "attempt": attempt + 1},
+                    details={"url": url, "attempt": attempt},
                 )
-                wait = 2**attempt
-                logger.warning("Connection error, retrying in %ds (attempt %d/%d)", wait, attempt + 1, self.max_retries)
+                wait = 2 ** (attempt - 1)
+                logger.warning("Connection error, retrying in %ds (attempt %d/%d)", wait, attempt, self.max_retries + 1)
                 time.sleep(wait)
         raise last_exception  # type: ignore[misc]
 
