@@ -2,8 +2,6 @@
 
 ServiceNow ITOM Compliance Auditor -- an MCP server that performs automated compliance auditing of ServiceNow ITOM configurations across CMDB, Discovery, and Asset Management.
 
-Part of the **servicenow-suite** program managed by [Agent Forge](https://github.com/amragl/agent-forge).
-
 ## Features
 
 - **CMDB Audit**: Orphan CI detection, stale record identification, duplicate detection, missing field validation
